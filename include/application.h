@@ -12,7 +12,7 @@ private:
     Model mModel;
     Mesh mPlaneMesh;
     Mesh::Material mPlaneMaterial;
-    Shader mModelShader, mPlaneShader;
+    Shader mModelShader;
     Texture mEnvironmentMap;
 
     cyMatrix4f mPlaneWorld;

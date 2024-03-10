@@ -7,9 +7,6 @@ Application::Application(int width, int height, const char* modelFile)
     if (!mModelShader.LoadFromSource(Shaders::BlinnVS, Shaders::BlinnFS))
         Utils::Error(1, "Unable to load model shaders.");
 
-    if (!mPlaneShader.LoadFromSource(Shaders::EnvironmentVS, Shaders::EnvironmentFS))
-        Utils::Error(1, "Unable to load environment shaders.");
-
     if (!mModel.LoadFromFile(modelFile))
         Utils::Error(1, "Unable to load model.");
 

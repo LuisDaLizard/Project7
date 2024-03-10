@@ -35,120 +35,38 @@ public:
 
 namespace Shaders
 {
-    static const char *ReflectionVS = R"(
+    static const char *DisplayDepthVS = R"(
 #version 330 core
 
 layout (location = 0) in vec3 aPosition;
-layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
 
 uniform mat4 uProjection;
 uniform mat4 uView;
 uniform mat4 uModel;
 
-out vec3 fNormal;
-out vec3 fPosition;
 out vec2 fTexCoords;
 
 void main()
 {
-    fPosition = (uModel * vec4(aPosition, 1)).xyz;
-    fNormal = mat3(transpose(inverse(uModel))) * aNormal;
     fTexCoords = aTexCoords;
     gl_Position = uProjection * uView * uModel * vec4(aPosition, 1);
 }
 )";
 
-    static const char *ReflectionFS = R"(
+    static const char *DisplayDepthFS = R"(
 #version 330 core
 
-struct Material
-{
-    vec3 kAmbience;
-    vec3 kDiffuse;
-    vec3 kSpecular;
-    float kShininess;
+out vec4 oColor
 
-    bool bDiffuse;
-    sampler2D mTextureDiffuse;
+uniform sampler2D uDepthMap;
 
-    bool bAmbience;
-    sampler2D mTextureAmbience;
-
-    bool bSpecular;
-    sampler2D mTextureSpecular;
-};
-
-out vec4 oColor;
-
-uniform vec3 uLightPos;
-uniform vec3 uViewPos;
-uniform Material uMaterial;
-uniform samplerCube uEnvironment;
-
-in vec3 fNormal;
-in vec3 fPosition;
 in vec2 fTexCoords;
 
-float diffuse(vec3 lightDir, vec3 normal)
-{
-    return max(dot(lightDir, normal), 0.0);
-}
-
-float specular(vec3 lightDir, vec3 viewDir, vec3 position, vec3 normal)
-{
-    vec3 halfway = normalize(lightDir + viewDir);
-    return pow(max(dot(normal, halfway), 0.0), 60);
-}
-
 void main()
 {
-    vec3 position = fPosition.xyz;
-    vec3 normal = normalize(fNormal);
-    vec3 lightDir = normalize(uLightPos - fPosition);
-    vec3 viewDir = normalize(uViewPos - fPosition);
-    vec3 reflection = normalize(reflect(-viewDir, normal));
-
-    vec4 lightDiffuse = vec4(vec3(diffuse(lightDir, normal)), 1) * 0.6;
-    vec4 lightAmbience = vec4(1) * 0.5;
-    vec4 lightSpecular = vec4(vec3(specular(lightDir, viewDir, position, normal)), 1) * 0.3;
-    vec4 lightReflection = texture(uEnvironment, reflection);
-
-    // No diffuse since we're outside and light everywhere
-    oColor = (lightAmbience + lightDiffuse + lightSpecular) * lightReflection;
-}
-)";
-
-    static const char *EnvironmentVS = R"(
-#version 330 core
-
-layout (location = 0) in vec3 aPosition;
-
-uniform mat4 uProjection;
-uniform mat4 uView;
-uniform mat4 uModel;
-
-out vec3 fDir;
-
-void main()
-{
-    fDir = inverse(mat3(uProjection * uView)) * vec3((uModel * vec4(aPosition, 1)));
-    gl_Position = uModel * vec4(aPosition, 1);
-}
-)";
-
-    static const char *EnvironmentFS = R"(
-#version 330 core
-
-out vec4 oColor;
-
-uniform samplerCube uEnvironment;
-
-in vec3 fDir;
-
-void main()
-{
-    oColor = texture(uEnvironment, fDir);
+    float depth = texture(uDepthMap, fTexCoords).r;
+    oColor = vec4(vec3(depth), 1.0);
 }
 )";
 
