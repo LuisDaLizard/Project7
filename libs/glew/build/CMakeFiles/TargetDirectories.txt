@@ -1,0 +1,11 @@
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/glew.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/glew_s.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/glewinfo.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/visualinfo.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/uninstall.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/edit_cache.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/rebuild_cache.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/list_install_components.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/install.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/install/local.dir
+/Users/luistadeosanchez/Workspace/C/CS5610/Project 2/glew/build/CMakeFiles/install/strip.dir
