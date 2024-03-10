@@ -12,7 +12,7 @@ private:
     Model mModel;
     Mesh mPlaneMesh;
     Mesh::Material mPlaneMaterial, mDepthViewMaterial;
-    Shader mModelShader, mDepthViewShader, mDepthShader;
+    Shader mModelShader, mDepthShader;
     Texture mEnvironmentMap;
     Framebuffer mDepthbuffer;
 

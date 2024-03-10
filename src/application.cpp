@@ -7,9 +7,6 @@ Application::Application(int width, int height, const char* modelFile)
     if (!mModelShader.LoadFromSource(Shaders::ShadowVS, Shaders::ShadowFS))
         Utils::Error(1, "Unable to load model shaders.");
 
-    if (!mDepthViewShader.LoadFromSource(Shaders::DisplayDepthVS, Shaders::DisplayDepthFS))
-        Utils::Error(1, "Unable to load depth view shaders.");
-
     if (!mDepthShader.LoadFromSource(Shaders::DepthVS, Shaders::DepthFS))
         Utils::Error(1, "Unable to load depth shaders.");
 
@@ -113,10 +110,6 @@ void Application::Draw()
 
     mModelShader.UploadUniform("uModel", mPlaneWorld);
     mPlaneMesh.Draw(mModelShader, mPlaneMaterial);
-
-    mDepthViewShader.Use();
-    mDepthViewShader.UploadUniform("uModel", mDepthViewWorld);
-    mPlaneMesh.Draw(mDepthViewShader, mDepthViewMaterial);
 }
 
 void Application::KeyCallback(GLFWwindow *, int key, int, int action, int)

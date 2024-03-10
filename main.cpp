@@ -25,6 +25,7 @@ int main(int argc, char **argv)
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_SAMPLES, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
@@ -35,6 +36,7 @@ int main(int argc, char **argv)
         Utils::Error(1, "Unable to create window");
 
     glfwMakeContextCurrent(window);
+    //glfwSwapInterval(0);
 
     /* Initialize GLEW */
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -43,6 +45,7 @@ int main(int argc, char **argv)
     /* Setup OpenGL */
     glClearColor(0, 0, 0, 1);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_MULTISAMPLE);
 
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
