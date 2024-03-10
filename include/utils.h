@@ -7,6 +7,7 @@
 #define MIN(a, b) ((a < b) ? a : b)
 #define CLAMP(min, a, max) (MAX(min, MIN(max, a)))
 #define DEG2RAD (M_PI / 180.0f)
+#define DEG2RADF ((float)(M_PI / 180.0f))
 
 namespace Utils
 {

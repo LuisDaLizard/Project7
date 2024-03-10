@@ -15,7 +15,6 @@ private:
     Shader mModelShader, mPlaneShader;
     Texture mEnvironmentMap;
 
-    cyMatrix4f mSkyboxWorld;
     cyMatrix4f mPlaneWorld;
     cyMatrix4f mModelProjection, mModelView, mModelWorld;
     cyVec3f mCamera, mCameraTarget, mLight;

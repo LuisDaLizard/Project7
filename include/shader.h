@@ -257,7 +257,6 @@ out vec4 oColor;
 uniform vec3 uLightPos;
 uniform vec3 uViewPos;
 uniform Material uMaterial;
-uniform samplerCube uEnvironment;
 
 in vec3 fNormal;
 in vec3 fPosition;
@@ -300,12 +299,7 @@ void main()
     else
         lightSpecular *= vec4(uMaterial.kSpecular, 1);
 
-    vec3 reflection = reflect(-viewDir, normal);
-
-    vec4 lightReflection = texture(uEnvironment, reflection) * vec4(uMaterial.kSpecular, 1);
-
-    oColor = lightAmbience + lightDiffuse + lightSpecular + lightReflection;
-
+    oColor = lightAmbience + lightDiffuse + lightSpecular;
 }
 )";
 }
