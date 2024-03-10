@@ -18,7 +18,7 @@ private:
 
     cyMatrix4f mPlaneWorld, mDepthViewWorld;
     cyMatrix4f mModelProjection, mModelView, mModelWorld;
-    cyMatrix4f mDepthProjection, mDepthView;
+    cyMatrix4f mLightProjection, mLightView, mLightTransform;
     cyVec3f mCamera, mCameraTarget, mLight;
     cyVec2d mMouse = {0, 0}, mPrevMouse = {0, 0};
 

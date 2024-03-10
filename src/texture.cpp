@@ -137,10 +137,12 @@ bool Texture::LoadDepthFromData(int width, int height, void *data)
     glGenTextures(1, &mTextureID);
     glBindTexture(mTextureType, mTextureID);
 
-    glTexParameteri(mTextureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(mTextureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(mTextureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(mTextureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(mTextureType, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+    glTexParameteri(mTextureType, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+    glTexParameteri(mTextureType, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(mTextureType, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(mTextureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(mTextureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, data);
 
