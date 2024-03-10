@@ -32,9 +32,14 @@ set(DEFINITIONS
         -DCY_NO_INTRIN_H
         )
 
+set(RESOURCE_OUTPUT
+        ${CMAKE_CURRENT_BINARY_DIR}
+        )
+
 if (WIN32)
 
         set(LIBS ${LIBS} opengl32.lib)
+        set(RESOURCE_OUTPUT ${RESOURCE_OUTPUT}/Debug)
 
 elseif (APPLE)
 
@@ -49,4 +54,4 @@ add_definitions(${DEFINITIONS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources/ DESTINATION ${RESOURCE_OUTPUT})

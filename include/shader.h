@@ -35,14 +35,31 @@ public:
 
 namespace Shaders
 {
+    static const char *DepthVS = R"(
+#version 330 core
+
+layout (location = 0) in vec3 aPosition;
+
+uniform mat4 uModel;
+uniform mat4 uView;
+uniform mat4 uProjection;
+
+void main()
+{
+    gl_Position = uProjection * uView * uModel * vec4(aPosition, 1);
+}
+)";
+
+    static const char *DepthFS = R"(
+
+)";
+
     static const char *DisplayDepthVS = R"(
 #version 330 core
 
 layout (location = 0) in vec3 aPosition;
 layout (location = 2) in vec2 aTexCoords;
 
-uniform mat4 uProjection;
-uniform mat4 uView;
 uniform mat4 uModel;
 
 out vec2 fTexCoords;
@@ -50,14 +67,14 @@ out vec2 fTexCoords;
 void main()
 {
     fTexCoords = aTexCoords;
-    gl_Position = uProjection * uView * uModel * vec4(aPosition, 1);
+    gl_Position = uModel * vec4(aPosition, 1);
 }
 )";
 
     static const char *DisplayDepthFS = R"(
 #version 330 core
 
-out vec4 oColor
+out vec4 oColor;
 
 uniform sampler2D uDepthMap;
 

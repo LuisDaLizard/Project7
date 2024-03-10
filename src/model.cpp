@@ -60,7 +60,7 @@ bool Model::LoadFromFile(const char *fileName)
             int faceCount = cyMesh.GetMaterialFaceCount(i);
             int firstFace = cyMesh.GetMaterialFirstFace(i);
 
-            Mesh::Vertex vertices[faceCount * 3];
+            auto *vertices = new Mesh::Vertex[faceCount * 3];
 
             for (int j = 0; j < faceCount; j++)
             {
@@ -103,8 +103,8 @@ bool Model::LoadFromFile(const char *fileName)
 
             if (mat.map_Kd)
             {
-                char diffusePath[strlen(directory) + strlen(mat.map_Kd) + 1];
-                memset(diffusePath, 0, sizeof(diffusePath));
+                char *diffusePath = new char[strlen(directory) + strlen(mat.map_Kd) + 1];
+                memset(diffusePath, 0, strlen(directory) + strlen(mat.map_Kd) + 1);
 
                 strncpy(diffusePath, directory, strlen(directory));
                 strcat(diffusePath, mat.map_Kd);
@@ -112,12 +112,14 @@ bool Model::LoadFromFile(const char *fileName)
                 mMaterials[i].bDiffuse = true;
                 mMaterials[i].tDiffuse = new Texture();
                 mMaterials[i].tDiffuse->LoadFromFile(diffusePath);
+
+                delete[] diffusePath;
             }
 
             if (mat.map_Ka)
             {
-                char ambiencePath[strlen(directory) + strlen(mat.map_Ka) + 1];
-                memset(ambiencePath, 0, sizeof(ambiencePath));
+                char *ambiencePath = new char[strlen(directory) + strlen(mat.map_Ka) + 1];
+                memset(ambiencePath, 0, strlen(directory) + strlen(mat.map_Ka) + 1);
 
                 strncpy(ambiencePath, directory, strlen(directory));
                 strcat(ambiencePath, mat.map_Ka);
@@ -125,12 +127,14 @@ bool Model::LoadFromFile(const char *fileName)
                 mMaterials[i].bAmbience = true;
                 mMaterials[i].tAmbience = new Texture();
                 mMaterials[i].tAmbience->LoadFromFile(ambiencePath);
+
+                delete[] ambiencePath;
             }
 
             if (mat.map_Ks)
             {
-                char specularPath[strlen(directory) + strlen(mat.map_Ks) + 1];
-                memset(specularPath, 0, sizeof(specularPath));
+                char *specularPath = new char[strlen(directory) + strlen(mat.map_Ks) + 1];
+                memset(specularPath, 0, strlen(directory) + strlen(mat.map_Ks) + 1);
 
                 strncpy(specularPath, directory, strlen(directory));
                 strcat(specularPath, mat.map_Ks);
@@ -138,7 +142,11 @@ bool Model::LoadFromFile(const char *fileName)
                 mMaterials[i].bSpecular = true;
                 mMaterials[i].tSpecular = new Texture();
                 mMaterials[i].tSpecular->LoadFromFile(specularPath);
+
+                delete[] specularPath;
             }
+
+            delete[] vertices;
         }
     }
     else
@@ -146,7 +154,7 @@ bool Model::LoadFromFile(const char *fileName)
         int faceCount = cyMesh.NF();
         int firstFace = 0;
 
-        Mesh::Vertex vertices[faceCount * 3];
+        auto *vertices = new Mesh::Vertex[faceCount * 3];
 
         for (int j = 0; j < faceCount; j++)
         {
@@ -185,17 +193,23 @@ bool Model::LoadFromFile(const char *fileName)
         mMaterials[0].bAmbience = false;
         mMaterials[0].bDiffuse = false;
         mMaterials[0].bSpecular = false;
+
+        delete[] vertices;
     }
+
     delete[] directory;
 
     return true;
 }
 
-void Model::Draw(Shader &shader)
+void Model::Draw(Shader &shader, bool useMaterials)
 {
     for (int i = 0; i < mNumMeshes; i++)
     {
-        mMeshes[i].Draw(shader, mMaterials[i]);
+        if (useMaterials)
+            mMeshes[i].Draw(shader, mMaterials[i]);
+        else
+            mMeshes[i].Draw(shader);
     }
 }
 

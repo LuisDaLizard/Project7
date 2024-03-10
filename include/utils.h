@@ -1,6 +1,8 @@
 #ifndef LOG_H
 #define LOG_H
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <string>
 
 #define MAX(a, b) ((a > b) ? a : b)

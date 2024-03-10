@@ -11,12 +11,14 @@ private:
     int mWidth, mHeight;
     Model mModel;
     Mesh mPlaneMesh;
-    Mesh::Material mPlaneMaterial;
-    Shader mModelShader;
+    Mesh::Material mPlaneMaterial, mDepthViewMaterial;
+    Shader mModelShader, mDepthViewShader, mDepthShader;
     Texture mEnvironmentMap;
+    Framebuffer mDepthbuffer;
 
-    cyMatrix4f mPlaneWorld;
+    cyMatrix4f mPlaneWorld, mDepthViewWorld;
     cyMatrix4f mModelProjection, mModelView, mModelWorld;
+    cyMatrix4f mDepthProjection, mDepthView;
     cyVec3f mCamera, mCameraTarget, mLight;
     cyVec2d mMouse = {0, 0}, mPrevMouse = {0, 0};
 

@@ -66,3 +66,15 @@ void Mesh::Draw(Shader &shader, Material &material) const
 
     glBindVertexArray(0);
 }
+
+void Mesh::Draw(Shader &shader) const
+{
+    if (!mNumVertices)
+        return;
+
+    glBindVertexArray(mVAO);
+
+    glDrawArrays(GL_TRIANGLES, 0, mNumVertices);
+
+    glBindVertexArray(0);
+}

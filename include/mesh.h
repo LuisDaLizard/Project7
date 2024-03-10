@@ -44,6 +44,7 @@ public:
 
     void Create(const Vertex *vertices, int numVertices);
     void Draw(Shader &shader, Material &material) const;
+    void Draw(Shader &shader) const;
 };
 
 namespace Meshes

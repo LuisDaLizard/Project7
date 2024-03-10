@@ -129,3 +129,22 @@ bool Texture::LoadCubemapFromFiles(const char **files)
 
     return result;
 }
+
+bool Texture::LoadDepthFromData(int width, int height, void *data)
+{
+    mTextureType = GL_TEXTURE_2D;
+
+    glGenTextures(1, &mTextureID);
+    glBindTexture(mTextureType, mTextureID);
+
+    glTexParameteri(mTextureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(mTextureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(mTextureType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(mTextureType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, data);
+
+    glBindTexture(mTextureType, 0);
+
+    return true;
+}

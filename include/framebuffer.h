@@ -7,7 +7,7 @@ class Framebuffer
 {
 private:
     unsigned int mFramebufferID;
-    unsigned int mDepthBufferID;
+    unsigned int mDepthbufferID;
 
     Texture mTexture;
 
@@ -23,6 +23,7 @@ public:
     Framebuffer& operator=(Framebuffer&&) = delete;
 
     bool Create(int width, int height, bool depth);
+    bool CreateDepthOnly(int width, int height);
     void Begin() const;
     void End(int width, int height);
 

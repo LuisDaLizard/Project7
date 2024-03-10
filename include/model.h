@@ -23,7 +23,7 @@ public:
     Model& operator=(Model&&) = delete;
 
     bool LoadFromFile(const char* modelDirectory);
-    void Draw(Shader &shader);
+    void Draw(Shader &shader, bool useMaterials);
 
     cyVec3f GetSize();
 };

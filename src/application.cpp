@@ -1,5 +1,5 @@
-#include "application.h"
 #include "utils.h"
+#include "application.h"
 
 Application::Application(int width, int height, const char* modelFile)
     : mWidth(width), mHeight(height)
@@ -7,8 +7,17 @@ Application::Application(int width, int height, const char* modelFile)
     if (!mModelShader.LoadFromSource(Shaders::BlinnVS, Shaders::BlinnFS))
         Utils::Error(1, "Unable to load model shaders.");
 
+    if (!mDepthViewShader.LoadFromSource(Shaders::DisplayDepthVS, Shaders::DisplayDepthFS))
+        Utils::Error(1, "Unable to load depth view shaders.");
+
+    if (!mDepthShader.LoadFromSource(Shaders::DepthVS, Shaders::DepthFS))
+        Utils::Error(1, "Unable to load depth shaders.");
+
     if (!mModel.LoadFromFile(modelFile))
         Utils::Error(1, "Unable to load model.");
+
+    if (!mDepthbuffer.CreateDepthOnly(1024, 1024))
+        Utils::Error(1, "Unable to create depthbuffer.");
 
     mPlaneMesh.Create(Meshes::PlaneMeshVertices, 6);
     mPlaneMaterial.bAmbience = false;
@@ -19,12 +28,20 @@ Application::Application(int width, int height, const char* modelFile)
     mPlaneMaterial.kDiffuse = cyVec3f(0.7f, 0.7f, 0.7f);
     mPlaneMaterial.kSpecular = cyVec3f(1, 1, 1);
 
+    mDepthViewMaterial.bAmbience = false;
+    mDepthViewMaterial.bDiffuse = true;
+    mDepthViewMaterial.bSpecular = false;
+    mDepthViewMaterial.tDiffuse = &mDepthbuffer.GetTexture();
+
     cyVec3f modelSize = mModel.GetSize();
     float modelScale = 1.0f / MAX(modelSize.x, MAX(modelSize.y, modelSize.z));
 
     mCameraTarget = {0, 0.25f, 0};
     mModelWorld = cyMatrix4f::Scale(modelScale) * cyMatrix4f::Translation({0, 0.5f, 0}) * cyMatrix4f::RotationX(-90 * DEG2RAD);
     mPlaneWorld = cyMatrix4f::Scale(2) * cyMatrix4f::RotationX(90 * DEG2RAD);
+    mDepthViewWorld = cyMatrix4f::Scale(0.25f) * cyMatrix4f::Translation({3, 3, 0});
+    mDepthProjection = cyMatrix4f::Perspective(90 * DEG2RADF, 1, 1, 9);
+    mDepthView = cyMatrix4f::View(mLight, cyVec3f(0, 0, 0), cyVec3f(0, 1, 0));
 }
 
 void Application::Update()
@@ -60,13 +77,27 @@ void Application::Update()
 
     /* Calculate Light Position */
     mLightRotation = (float)glfwGetTime();
-    mLight.x = sinf(mLightRotation) * mModelRadius;
-    mLight.y = mModelRadius;
-    mLight.z = cosf(mLightRotation) * mModelRadius;
+    mLight.x = sinf(mLightRotation) * 2;
+    mLight.y = 2;
+    mLight.z = cosf(mLightRotation) * 2;
+    mDepthView.SetView(mLight, cyVec3f(0, 0, 0), cyVec3f(0, 1, 0));
 }
 
 void Application::Draw()
 {
+    mDepthbuffer.Begin();
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    mDepthShader.Use();
+    mDepthShader.UploadUniform("uProjection", mDepthProjection);
+    mDepthShader.UploadUniform("uView", mDepthView);
+    mDepthShader.UploadUniform("uModel", mModelWorld);
+    mModel.Draw(mDepthShader, false);
+
+    mDepthShader.UploadUniform("uModel", mPlaneWorld);
+    mPlaneMesh.Draw(mDepthShader, mPlaneMaterial);
+
+    mDepthbuffer.End(mWidth, mHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     mModelShader.Use();
@@ -75,10 +106,14 @@ void Application::Draw()
     mModelShader.UploadUniform("uModel", mModelWorld);
     mModelShader.UploadUniform("uLightPos", mLight);
     mModelShader.UploadUniform("uViewPos", mCamera);
-    mModel.Draw(mModelShader);
+    mModel.Draw(mModelShader, true);
 
     mModelShader.UploadUniform("uModel", mPlaneWorld);
     mPlaneMesh.Draw(mModelShader, mPlaneMaterial);
+
+    mDepthViewShader.Use();
+    mDepthViewShader.UploadUniform("uModel", mDepthViewWorld);
+    mPlaneMesh.Draw(mDepthViewShader, mDepthViewMaterial);
 }
 
 void Application::KeyCallback(GLFWwindow *, int key, int, int action, int)
