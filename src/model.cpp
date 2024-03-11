@@ -96,6 +96,9 @@ bool Model::LoadFromFile(const char *fileName)
             cyTriMesh::Mtl mat = cyMesh.M(i);
 
             // Convert float[3] to cyVec3f
+            mMaterials[i].bAmbience = false;
+            mMaterials[i].bDiffuse = false;
+            mMaterials[i].bSpecular = false;
             mMaterials[i].kAmbience = *((cyVec3f *) mat.Ka);
             mMaterials[i].kDiffuse = *((cyVec3f *) mat.Kd);
             mMaterials[i].kSpecular = *((cyVec3f *) mat.Ks);
