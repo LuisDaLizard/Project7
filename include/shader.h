@@ -155,6 +155,12 @@ void main()
 )";
 
     static const char *DepthFS = R"(
+#version 330 core
+
+void main()
+{
+
+}
 )";
 
 

@@ -7,6 +7,8 @@ Application::Application(int width, int height, const char* modelFile)
     if (!mModelShader.LoadFromSource(Shaders::ShadowVS, Shaders::ShadowFS))
         Utils::Error(1, "Unable to load model shaders.");
 
+    fprintf(stdout, "%s\n", Shaders::DepthFS);
+
     if (!mDepthShader.LoadFromSource(Shaders::DepthVS, Shaders::DepthFS))
         Utils::Error(1, "Unable to load depth shaders.");
 
